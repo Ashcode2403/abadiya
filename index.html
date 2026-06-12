@@ -7,7 +7,7 @@
 <meta property="og:type" content="website">
 <meta property="og:title" content="Adhabiya &amp; Salman | Wedding Invitation 💍">
 <meta property="og:description" content="You're gracefully invited to our Wedding celebration!">
-    <meta property="og:image" content="https://adhabiya-salman.vercel.app/thum.png">
+    <meta property="og:image" content="https://adhabiya-salman.vercel.app/thum.jpg">
   <meta property="og:url" content="https://adhabiya-salman.vercel.app/">
 
 <meta name="description" content="Join us to celebrate the wedding of Salman Kareem & Adhabiya Ummer on Sunday, 19th July 2026 at Highness Auditorium, Pukkattupady.">
@@ -1253,6 +1253,9 @@ footer::before {
 <!-- ============================
      HERO
 ============================ -->
+<audio id="bg-music" loop>
+  <source src="song.mp3" type="audio/mpeg">
+</audio>
 <section id="hero">
   <div class="hero-bg"></div>
   <div class="hero-overlay"></div>
@@ -1608,13 +1611,36 @@ function submitRsvp(e) {
   document.querySelector('.rsvp-success').style.display = 'block';
 }
 
-// ---- MUSIC TOGGLE (visual only) ----
 let musicOn = false;
 const musicBtn = document.getElementById('music-btn');
+const bgMusic = document.getElementById('bg-music');
+
+// Attempt autoplay on page load
+window.addEventListener('load', () => {
+  bgMusic.play()
+    .then(() => {
+      musicOn = true;
+      musicBtn.textContent = '♬';
+      musicBtn.title = 'Pause music';
+    })
+    .catch(() => {
+      console.log('Autoplay blocked by browser');
+    });
+});
+
+// Toggle music
 musicBtn.addEventListener('click', () => {
   musicOn = !musicOn;
-  musicBtn.textContent = musicOn ? '♬' : '♪';
-  musicBtn.title = musicOn ? 'Pause music' : 'Play music';
+
+  if (musicOn) {
+    bgMusic.play();
+    musicBtn.textContent = '♬';
+    musicBtn.title = 'Pause music';
+  } else {
+    bgMusic.pause();
+    musicBtn.textContent = '♪';
+    musicBtn.title = 'Play music';
+  }
 });
 </script>
 
