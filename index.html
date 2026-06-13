@@ -1253,7 +1253,7 @@ footer::before {
 <!-- ============================
      HERO
 ============================ -->
-<audio id="bg-music" loop>
+<audio id="bg-music" loop autoplay muted>
   <source src="song.mp3" type="audio/mpeg">
 </audio>
 <section id="hero">
@@ -1610,38 +1610,54 @@ function submitRsvp(e) {
   document.getElementById('rsvp-form').style.display = 'none';
   document.querySelector('.rsvp-success').style.display = 'block';
 }
+    
+const bgMusic = document.getElementById("bg-music");
+const musicBtn = document.getElementById("music-btn");
 
 let musicOn = false;
-const musicBtn = document.getElementById('music-btn');
-const bgMusic = document.getElementById('bg-music');
 
-// Attempt autoplay on page load
-window.addEventListener('load', () => {
-  bgMusic.play()
-    .then(() => {
-      musicOn = true;
-      musicBtn.textContent = '♬';
-      musicBtn.title = 'Pause music';
-    })
-    .catch(() => {
-      console.log('Autoplay blocked by browser');
-    });
+// Autoplay muted
+window.addEventListener("load", () => {
+  bgMusic.play().catch(err => {
+    console.log("Autoplay blocked:", err);
+  });
 });
 
-// Toggle music
-musicBtn.addEventListener('click', () => {
-  musicOn = !musicOn;
-
-  if (musicOn) {
+// First click anywhere: unmute and play
+document.addEventListener(
+  "click",
+  () => {
+    bgMusic.muted = false;
     bgMusic.play();
-    musicBtn.textContent = '♬';
-    musicBtn.title = 'Pause music';
-  } else {
-    bgMusic.pause();
-    musicBtn.textContent = '♪';
-    musicBtn.title = 'Play music';
-  }
-});
+
+    musicOn = true;
+
+    if (musicBtn) {
+      musicBtn.textContent = "♬";
+      musicBtn.title = "Pause music";
+    }
+  },
+  { once: true }
+);
+
+// Toggle music button
+if (musicBtn) {
+  musicBtn.addEventListener("click", (e) => {
+    e.stopPropagation();
+
+    if (bgMusic.paused) {
+      bgMusic.play();
+      musicOn = true;
+      musicBtn.textContent = "♬";
+      musicBtn.title = "Pause music";
+    } else {
+      bgMusic.pause();
+      musicOn = false;
+      musicBtn.textContent = "♪";
+      musicBtn.title = "Play music";
+    }
+  });
+}
 </script>
 
 </body>
